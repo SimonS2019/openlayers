@@ -1,86 +1,43 @@
-window.onload = init
+window.onload = init;
 
-  // Controls
-  const fullScreenControl = new ol.control.FullScreen();
-  const mousePositionControl = new ol.control.MousePosition();
-  const overViewMapControl = new ol.control.OverviewMap({
-    collapsed: false,
+function init(){
+  const map = new ol.Map({
+    view: new ol.View({
+      center: [0, 0],
+      zoom: 3,
+      extent: [12400753.576694038, -5658730.000549673, 17174426.336716905, -980228.5067132516]
+    }),
     layers: [
       new ol.layer.Tile({
-        source: new ol.source.OSM()      
+        source: new ol.source.OSM(),
+        zIndex: 1,
+        visible: true,
+        extent: [12400753.576694038, -5658730.000549673, 17174426.336716905, -980228.5067132516],
+        opacity: 0.4
+      })
+    ],
+    target: 'js-map'
+  })
+
+  // Layer Group
+  const layerGroup = new ol.layer.Group({
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM({
+          url: 'https://{a-c}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
+        }),
+        zIndex: 0,
+        visible: true,
+        extent: [12400753.576694038, -5658730.000549673, 17174426.336716905, -980228.5067132516],
+        opacity: 0.1
       })
     ]
-  });
-  const scaleLineControl = new ol.control.ScaleLine();
-  const zoomSliderControl = new ol.control.ZoomSlider();
-  const zoomToExtentControl = new ol.control.ZoomToExtent();
+  })
+  map.addLayer(layerGroup);
 
-
-function init() {
-    const map = new ol.Map({
-        view: new ol.View({
-            center: [-12080385, 7567433],
-            zoom: 3,
-            maxZoom: 26,
-            minZoom: 2,
-            // rotation:0.5
-        }),
-        layers: [
-            new ol.layer.Tile({
-                source: new ol.source.OSM()
-            })
-        ],
-        target: "js-map",
-        keyboardEventTarget: document,
-        controls:ol.control.defaults().extend([
-            fullScreenControl,
-            mousePositionControl,
-            overViewMapControl,
-            scaleLineControl,
-            zoomSliderControl,
-            zoomToExtentControl
-        ])
-    })
-
-
-    const popupContainerElement = document.getElementById('popup-coordinates');
-    const popup = new ol.Overlay({
-        element: popupContainerElement,
-        positioning: 'top-right'
-    })
-
-    map.addOverlay(popup);
-
-    map.on('click', function (e) {
-        console.log(e)
-        console.log(e.coordinate)
-        console.log(e.Tn)
-        const clickedCoordinate = e.coordinate;
-        popup.setPosition(undefined);
-        popup.setPosition(clickedCoordinate);
-        popupContainerElement.innerHTML = clickedCoordinate;
-    })
-
-    // DragRotate Interaction
-    const dragRotateInteraction = new ol.interaction.DragRotate({
-        condition: ol.events.condition.altKeyOnly
-    })
-    map.addInteraction(dragRotateInteraction)
-
-    const drawInteraction = new ol.interaction.Draw({
-        type: 'Polygon',
-        freehand: true
-    })
-    map.addInteraction(drawInteraction)
-    drawInteraction.on('drawend', function (e) {
-        console.log("Drawing finished");
-        console.log(e);
-        let parser = new ol.format.GeoJSON();
-        let drawFeature = parser.writeFeaturesObject([e.feature])
-        console.log(drawFeature);
-        console.log(drawFeature.features[0].geometry.coordinates);
-        console.log(drawFeature.features[0].geometry.coordinates);
-    })
-
+  // Print out mouse click coordinates
+  map.on('click', function(e){
+    console.log(e.coordinate);
+  })
 }
 
