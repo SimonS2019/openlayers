@@ -4,11 +4,16 @@ window.onload = init
 function init() {
     const map = new ol.Map({
         view: new ol.View({
+<<<<<<< HEAD
             center:[-12080385,7567433],
             zoom : 3,
             maxZoom:6,
             minZoom:2,
             // rotation:0.5
+=======
+            center:[0,0],
+            zoom : 2
+>>>>>>> origin/main
         }),
         layers: [
             new ol.layer.Tile({
