@@ -13,7 +13,7 @@ function init() {
                 zIndex: 1,
                 visible: true,
                 // extent: [12400753.576694038, -5658730.000549673, 17174426.336716905, -980228.5067132516],
-                opacity: 0.4
+                opacity: 0
             })
         ],
         target: 'js-map'
@@ -53,7 +53,7 @@ function init() {
         source: new ol.source.XYZ({
             // url: 'http://{1-4}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
             //   url: 'http://{1-4}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png',
-              url: 'http://{1-4}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png',
+            url: 'http://{1-4}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png',
             attributions: '© CARTO'
         }),
         visible: false
@@ -70,32 +70,43 @@ function init() {
     map.addLayer(tileDebugLayer);
 
 
-  // Stamen basemap layer
-  const stamenBaseLayer = new ol.layer.Tile({
-    source: new ol.source.Stamen({
-    //   layer: 'terrain-labels',
-      layer: 'terrain',
-    //   layer: 'watercolor',
-      attributions: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
-    }),
-    visible: false
-  })
-  map.addLayer(stamenBaseLayer);
+    // Stamen basemap layer
+    const stamenBaseLayer = new ol.layer.Tile({
+        source: new ol.source.Stamen({
+            //   layer: 'terrain-labels',
+            layer: 'terrain',
+            //   layer: 'watercolor',
+            attributions: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
+        }),
+        visible: false
+    })
+    map.addLayer(stamenBaseLayer);
 
-  const stamenBaseMapLayer = new ol.layer.Tile({
-    source: new ol.source.XYZ({
-    //   url: 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg',
-      url: 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg',
-      attributions: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
-    }),
-    visible: true
-  })
+    const stamenBaseMapLayer = new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            //   url: 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg',
+            url: 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg',
+            attributions: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
+        }),
+        visible: false
+    })
 
-  map.addLayer(stamenBaseMapLayer);
+    map.addLayer(stamenBaseMapLayer);
 
     // Print out mouse click coordinates
     map.on('click', function (e) {
         console.log(e.coordinate);
     })
+
+    // tile ArcGIS REST API Layer
+    const tileArcGISLayer = new ol.layer.Tile({
+        source: new ol.source.TileArcGISRest({
+            // url: ""
+            url: "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer"
+            // url: "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Louisville/LOJIC_LandRecords_Louisville/MapServer"
+        }),
+        visible: true
+    })
+    map.addLayer(tileArcGISLayer);
 }
 
